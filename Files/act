@@ -135,6 +135,43 @@ function placeDown()
   return placeDir(down)
 end
 
+-- This code was mostly copied from:
+-- http://lua-users.org/wiki/SleepFunction
+
+function sleep(n)  -- seconds
+  -- print("sleep called is argument ",n)
+  local clock = os.clock
+  local t0 = clock()
+  while clock() - t0 <= n do 
+  end
+  -- print(t0,"    ",clock())
+  return true
+end
+-- warning: clock can eventually wrap around for sufficiently large n
+-- (whose value is platform dependent).  Even for n == 1, clock() - t0
+-- might become negative on the second that clock wraps.
+
+function rDig()
+  -- print("rDig entered")
+  -- print("turtle.detect = ",turtle.detect())
+  while turtle.detect() do
+    turtle.dig()
+    sleep(0.25)
+    print("turtle.detect() is ",turtle.detect())
+  end
+  return true
+end
+
+function rDigUp()
+  -- print("rDig entered")
+  -- print("turtle.detect = ",turtle.detect())
+  while turtle.detectUp() do
+    turtle.digUp()
+    sleep(0.25)
+    -- print("turtle.detect() is ",turtle.detect())
+  end
+  return true
+end
 -- command handlers
 
 local tHandlers = {
@@ -150,10 +187,10 @@ local tHandlers = {
   ["t"] = turtle.transfer,
   ["R"] = turtle.refuel,
   -- dig
-  ["Df"] = turtle.dig,
-  ["Du"] = turtle.digUp,
+  ["Df"] = rDig,
+  ["Du"] = rDigUp,
   ["Dd"] = turtle.digDown,
-  -- attach
+  -- attack
   ["Af"] = turtle.attack,
   ["Au"] = turtle.attackUp,
   ["Ad"] = turtle.attackDown,
@@ -183,7 +220,7 @@ local tHandlers = {
   ["=d"] = turtle.compareDown,
   ["=="] = turtle.compareTo,
 
-  ["z"] = sleep
+  ["Z"] = sleep
 }
 
 function getNumber(s, pos, max, default)
@@ -204,6 +241,7 @@ function act(plan)
   local max = plan:len()
   while pos <= max do
     local c = plan:sub(pos, pos)
+    -- Begin handling sub plan.
     if c == "(" then
       -- read until matching )
       local p = 1
@@ -229,7 +267,9 @@ function act(plan)
           return false
         end
       end
+      -- End handling sub plan.
     else
+      -- Begin getting 2 character commands
       if c == "D"
         or c == "A"
         or c == "P"
@@ -241,8 +281,11 @@ function act(plan)
         pos = pos + 1
         c = c .. plan:sub(pos, pos)
       end
+      -- End getting 2 character commands.
+
       -- call handler
       local fn = tHandlers[c]
+      -- Get optional following number for commands that can use one.
       if fn then
         if c == "f" or c == "b" or c == "u" or c == "d" or c == "l" or c == "r" or c == "Tf" or c == "Td" or c == "Tu" then
           -- move handlers, number defines iterations
@@ -260,6 +303,9 @@ function act(plan)
               end
             end
           end
+          -- End getting optional following number.
+          
+          -- Begin evaluating comparison commands.
         elseif c:sub(1,1) == "?" or c:sub(1,1) == "=" then
           -- detect and compare, failure will only skip out of the current block
           local result = nil
@@ -273,16 +319,27 @@ function act(plan)
           if not result then
             return true -- stop current plan
           end
+          -- End handling comparison commands.
+
+
         else
+
+
           -- all other handlers, number gets passed to function
           local n = nil
           n, pos = getNumber(plan, pos, max)
+
+          -- Check to see if there is a handler for that command.
+          -- print("fn is ",fn)
+          -- print("fn(n) is ",fn(n))
           if not fn(n) then
             print("Can't perform action: " .. c)
             -- return false
           end
         end
+
       else
+        -- If there is no handler for the command then you end up here.
         print("Unknown command: " .. c)
         return false
       end

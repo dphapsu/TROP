@@ -37,4 +37,4 @@ if download then --checks if download returned true or false
 end --close the function
 
 git_get("TROPinstaller","TROPinstaller")
-shell.run("TROPinstaller")
+os.run(,"TROPinstaller")
