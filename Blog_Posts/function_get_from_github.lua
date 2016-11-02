@@ -20,7 +20,7 @@ and change the false to true.
 
 get("startup","startup") --remember the quotation marks! (" ")
 ]]
-
+local function get(repoFile,saveTo)
 local download = http.get("https://raw.github.com/myName/repo/repoFile") --This will make 'download' hold the contents of the file.
 if download then --checks if download returned true or false
    local handle = download.readAll() --Reads everything in download
