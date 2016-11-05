@@ -142,7 +142,19 @@ function sleep(n)  -- seconds
   -- print("sleep called is argument ",n)
   local clock = os.clock
   local t0 = clock()
-  while clock() - t0 <= n do 
+  local z
+  -- print("Function sleep argument ",n)
+  if n == nil then 
+    -- print("n is nil.")
+    z = 1
+  else
+    -- print("n is ",n)
+    z = n
+  end
+   print("Waiting ",n," seconds from ",clock())
+  while clock() - t0 <= z do 
+    os.queueEvent("clockWaitEvent")
+    os.pullEvent()
   end
   -- print(t0,"    ",clock())
   return true
@@ -156,7 +168,7 @@ function rDig()
   -- print("turtle.detect = ",turtle.detect())
   while turtle.detect() do
     turtle.dig()
-    sleep(0.25)
+    sleep(0.4)
     print("turtle.detect() is ",turtle.detect())
   end
   return true
@@ -167,7 +179,7 @@ function rDigUp()
   -- print("turtle.detect = ",turtle.detect())
   while turtle.detectUp() do
     turtle.digUp()
-    sleep(0.25)
+    sleep(0.4)
     -- print("turtle.detect() is ",turtle.detect())
   end
   return true

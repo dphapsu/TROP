@@ -89,7 +89,10 @@ while read() == "y" do
 	
 	for mv=1,6 do
 		fuel()
-		turtle.up()
+		while not turtle.up() do
+			turtle.digUp()
+			sleep(0.5)
+		end
 		depth = depth - 1
 	end
 	
