@@ -1,3 +1,4 @@
+-- VERSION 2016.11.05 1835
 --[[
     As seen in The ComputerCraft Challenge [youtube.com/bwochinski]
 	This program will mine in vertical shafts down to bedrock, checking the walls of the shaft.

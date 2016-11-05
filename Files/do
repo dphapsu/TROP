@@ -1,3 +1,4 @@
+-- VERSION 2016.11.05 1835
 -- command line interfact to act api
 -- you will need the act script
 local tArgs = { ... }

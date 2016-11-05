@@ -1,3 +1,4 @@
+-- VERSION 2016.11.05 1835
 --[[
 Accesses a github repository and download the files into your computer.
 
@@ -21,19 +22,23 @@ and change the false to true.
 get("startup","startup") --remember the quotation marks! (" ")
 ]]
 local function git_get(repoFile,saveTo)
-local download = http.get("https://github.com/dphapsu/TROP/raw/master/Files/"..repoFile) --This will make 'download' hold the contents of the file.
-if download then --checks if download returned true or false
-   local handle = download.readAll() --Reads everything in download
-   -- print(handle)
-   download.close() --remember to close the download!
-   local file = fs.open(saveTo,"w") --opens the file defined in 'saveTo' with the permissions to write.
-   file.write(handle) --writes all the stuff in handle to the file defined in 'saveTo'
-   file.close() --remember to close the file!
-   print("Successfully downloaded ",saveTo)
+  local download = http.get("https://github.com/dphapsu/TROP/raw/master/Files/"..repoFile) --This will make 'download' hold the contents of the file.
+  if download then --checks if download returned true or false
+     local handle = download.readAll() --Reads everything in download
+     -- print(handle)
+     download.close() --remember to close the download!
+     --[[ 
+     Write file.
+     --]]
+     local file = fs.open(saveTo,"w") --opens the file defined in 'saveTo' with the permissions to write.
+     if file == nil then print("Oops. The fs.open function failed on ",saveTo)
+     file.write(handle) --writes all the stuff in handle to the file defined in 'saveTo'
+     file.close() --remember to close the file!
+     print("Successfully downloaded ",saveTo)
   else --if returned false
-   print("Unable to download the file "..repoFile)
-   print("Make sure you have the HTTP API enabled or")
-   print("an internet connection!")
+     print("Unable to download the file "..repoFile)
+     print("Make sure you have the HTTP API enabled or")
+     print("an internet connection!")
   end --end the if
 end --close the function
 
