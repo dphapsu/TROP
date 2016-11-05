@@ -1,0 +1,4 @@
+local tArgs = { ... }
+os.loadAPI("act")
+local plan =  table.concat(tArgs) 
+act.act(plan)
