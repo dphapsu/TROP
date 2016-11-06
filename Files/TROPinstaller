@@ -1,4 +1,4 @@
--- VERSION 2016.11.05 1835
+-- VERSION 2016.11.05 1842
 local function git_get(repoFile,saveTo)
   local download = http.get("https://github.com/dphapsu/TROP/raw/master/Files/"..repoFile) --This will make 'download' hold the contents of the file.
   if download then --checks if download returned true or false
@@ -29,4 +29,4 @@ git_get("measure","measure")
 git_get("measureapi","measureapi")
 git_get("run","run")
 git_get("shaftmine","shaftmine")
-git_get("marker","market")
+git_get("market","market")

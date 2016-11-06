@@ -31,7 +31,7 @@ local function git_get(repoFile,saveTo)
      Write file.
      --]]
      local file = fs.open(saveTo,"w") --opens the file defined in 'saveTo' with the permissions to write.
-     if file == nil then print("Oops. The fs.open function failed on ",saveTo)
+     if file == nil then print("Oops. The fs.open function failed on ",saveTo) end
      file.write(handle) --writes all the stuff in handle to the file defined in 'saveTo'
      file.close() --remember to close the file!
      print("Successfully downloaded ",saveTo)
